@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS products;
 /* テーブル名: 商品 */
 /**********************************/
 CREATE TABLE products(
-		id INTEGER NOT NULL,
+		id SERIAL,
 		name VARCHAR(10) NOT NULL,
 		price INTEGER NOT NULL,
 		stock INTEGER NOT NULL DEFAULT 0
