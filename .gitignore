@@ -1,0 +1,33 @@
+# ここからプロジェクト固有の対象ディレクトリおよびファイルを追記
+
+# IDE関連の設定
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# Eclipse Core
+.project
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+# Eclipse settings
+.settings/
+
+# OS固有のファイル
+.DS_Store
+Thumbs.db
+
+# Microsoft Office & LibreOffice のロックファイル
+~$*
+.~lock.*
+
+# ログファイル
+*.log
+
+# その他
+*.swp
+*.bak
+.sass-cache/
+
+/bin/
