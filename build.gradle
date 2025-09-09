@@ -38,6 +38,7 @@ dependencies {
 	// JUnit etc..
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
     // テストではクラスが必要になるので testImplementation でも追加
     testImplementation 'org.apache.tomcat:tomcat-servlet-api:10.1.24'
 }
