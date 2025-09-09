@@ -68,7 +68,7 @@ public class JdbcAll {
 							  "商品ID", "カテゴリID", "商品名", "価格", "数量");
 			// 7.2 すべての要素の表示
 			for (Product bean : list) {
-				// 6.3 要素の表示
+				// 7.3 要素の表示
 				System.out.printf("%-4d\t%-4d\t%-16s\t%-4d\t%-4d\n",
 									bean.getId(),
 									bean.getCategoryId(),
@@ -82,7 +82,7 @@ public class JdbcAll {
 			// 例外が発生した場合：スタックトレースを表示（必要最低限のエラー情報を表示）
 			e.printStackTrace();
 		} finally {
-			// 手順-8. データベース接続関連のブジェクとのクローズ処理
+			// 手順-8. データベース接続関連のオブジェクとのクローズ処理
 			try {
 				if (rs != null) {
 					rs.close();
