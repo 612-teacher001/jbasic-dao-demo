@@ -1,4 +1,4 @@
-# *T1.3* JDBC接続によるCRUD操作・全検索 ～ try-with-resourcesの導入編
+# *T1.1* JDBC接続によるCRUD操作・全検索 ～ try-with-resourcesの導入編
 
 [Javaによるデータベース接続とCRUD操作のチュートリアル](../tutorials.md) > [JDBC接続によるCRUD操作](./10-jdbc.md)
 
