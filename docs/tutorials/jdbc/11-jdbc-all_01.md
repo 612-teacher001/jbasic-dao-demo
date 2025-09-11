@@ -138,6 +138,7 @@ for (Product bean : list) {
 }
 ```
 - 画面表示には `System.out.printf` メソッドを使って整形して表示しています。
+- `System.out.printf` メソッドについては [`System.out.printf()` メソッドの使い方](../../appendix/printf.md) を参照してください。
 
 ---
 
