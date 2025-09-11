@@ -55,15 +55,8 @@ public class JdbcKeyword {
 			// 手順-6. SQLの実行と結果セットの取得
 			List<Product> list = new ArrayList<Product>();
 			try (ResultSet rs = pstmt.executeQuery();) {
-				// 手順-7. 結果セットから商品リストに変換
-				while (rs.next()) {
-					int id = rs.getInt("id");
-					int categoryId = rs.getInt("category_id");
-					String name = rs.getString("name");
-					int price = rs.getInt("price");
-					int quantity = rs.getInt("quantity");
-					list.add(new Product(id, categoryId, name, price, quantity));
-				}
+				// 手順-7. 結果セットから商品リストに変換：convertToList(ResultSet)メソッドの呼び出し
+				list = convertToList(rs);
 			}
 			// 手順-8. 検索結果のチェック
 			if (list.size() == 0) {
@@ -91,6 +84,26 @@ public class JdbcKeyword {
 			e.printStackTrace();
 		}
 
+	}
+
+	/**
+	 * 結果セットの各行を Product オブジェクトに変換し、リストとして返す。
+	 * 
+	 * @param rs SQL実行結果の ResultSet（商品情報が格納されていることを前提とする）
+	 * @return   商品のリスト（空リストの場合もある）
+	 * @throws SQLException 結果セットから値を取得する際にエラーが発生した場合
+	 */
+	public static List<Product> convertToList(ResultSet rs) throws SQLException {
+		List<Product> list = new ArrayList<Product>();
+		while (rs.next()) {
+			int id = rs.getInt("id");
+			int categoryId = rs.getInt("category_id");
+			String name = rs.getString("name");
+			int price = rs.getInt("price");
+			int quantity = rs.getInt("quantity");
+			list.add(new Product(id, categoryId, name, price, quantity));
+		}
+		return list;
 	}
 
 }
