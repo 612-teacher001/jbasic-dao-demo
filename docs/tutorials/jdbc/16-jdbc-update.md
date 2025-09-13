@@ -1,4 +1,4 @@
-# *T1.2* JDBC接続によるCRUD操作・更新 ～ 商品を更新してみた編
+# *T1.6* JDBC接続によるCRUD操作・更新 ～ 商品を更新してみた編
 
 [Javaによるデータベース接続とCRUD操作のチュートリアル](../tutorials.md) > [JDBC接続によるCRUD操作](./10-jdbc.md)
 
