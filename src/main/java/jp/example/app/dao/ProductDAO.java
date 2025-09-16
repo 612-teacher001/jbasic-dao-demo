@@ -21,6 +21,7 @@ public class ProductDAO {
 	 */
 	// SQL文字列定数群
 	private static final String SQL_FIND_ALL = "SELECT * FROM products ORDER BY id";
+	private static final String SQL_FIND_BY_ID = "SELECT * FROM products WHERE id = ?";
 	
 	/**
 	 * フィールド：データベース接続オブジェクト
@@ -74,6 +75,53 @@ public class ProductDAO {
 		}
 	}
 	
+	/**
+	 * 指定された商品IDに合致した商品を取得する
+	 * @param targetId 指定する商品ID
+	 * @return 商品IDに合致した商品がある場合はその商品インスタンス、それ以外はnull
+	 * @throws SQLException 
+	 */
+	public Product findById(int targetId) throws SQLException {
+		
+		// 戻り値を宣言
+		Product bean = null;
+		try (// SQL実行オブジェクトの取得
+			 PreparedStatement pstmt = this.conn.prepareStatement(SQL_FIND_BY_ID);
+			) {
+			// プレースホルダをパラメータに置換
+			pstmt.setInt(1, targetId);
+			try (// SQLの実行と結果セットの取得
+				 ResultSet rs = pstmt.executeQuery();
+				) {
+				// 結果セットを商品リストに変換
+				bean = this.convertToBean(rs);
+			}
+			
+		}
+		return bean;
+	}
+
+	/**
+	 * 結果セットの行を Product オブジェクトに変換し、インスタンスとして返す。
+	 * 
+	 * @param rs SQL実行結果の ResultSet（商品情報が格納されていることを前提とする）
+	 * @return   商品インスタンス（nullの場合もある）
+	 * @throws SQLException 結果セットから値を取得する際にエラーが発生した場合
+	 */
+	private Product convertToBean(ResultSet rs) throws SQLException {
+		Product bean = null;
+		if (rs.next()) {
+			bean = new Product();
+			int id = rs.getInt("id");
+			int categoryId = rs.getInt("category_id");
+			String name = rs.getString("name");
+			int price = rs.getInt("price");
+			int quantity = rs.getInt("quantity");
+			bean = new Product(id, categoryId, name, price, quantity);
+		}
+		return bean;
+	}
+
 	/**
 	 * 結果セットの各行を Product オブジェクトに変換し、リストとして返す。
 	 * 
