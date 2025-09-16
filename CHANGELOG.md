@@ -14,6 +14,13 @@
 
 ---
 
+## [T2.2] - 2025-09-16
+### Added
+- DAOによる主キー検索
+
+## Changed
+- `jp.example.app.t2.DaoAll#showProducts(List<Product>)` メソッドの可視性を `private` から `public` に修正。
+
 ## [T2.1] - 2025-09-16
 ### Added
 - DAOによる全件検索

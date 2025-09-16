@@ -62,7 +62,7 @@ public class DaoAll {
 	 *
 	 * @param list 商品リスト
 	 */
-	private static void showProducts(List<Product> list) {
+	public static void showProducts(List<Product> list) {
 		// 商品リストの要素数を表示
 		Display.showMessageln(list.size() + "件の商品が見つかりました。\n");
 		// 見出し行の表示
