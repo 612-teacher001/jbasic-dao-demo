@@ -5,18 +5,22 @@
 
 
 
-## [Unreleased] - チュートリアル: T1.1 - T1.7
+## [Unreleased] - チュートリアル: T2.1 - T2.7
 ### Added
-- JDBC接続によるCRUD操作の実現
+- DAOによるCRUD操作の実現
 
 ### Changed
 - （修正・改善した説明やコードは未定）
 
 ---
 
+## [T2.1] - 2025-09-16
+### Added
+- DAOによる全件検索
+
 ## [T2.0] - 2025-09-15
 ### Added
-- JDBCによるCRUD操作
+- DAOによるCRUD操作
 
 ## [T1.7] - 2025-09-13
 ### Added
