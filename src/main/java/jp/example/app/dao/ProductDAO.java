@@ -22,6 +22,7 @@ public class ProductDAO {
 	// SQL文字列定数群
 	private static final String SQL_FIND_ALL = "SELECT * FROM products ORDER BY id";
 	private static final String SQL_FIND_BY_ID = "SELECT * FROM products WHERE id = ?";
+	private static final String SQL_FIND_BY_NAME_LIKE_KEYWORD = "SELECT * FROM products WHERE name LIKE ? ORDER BY id";
 	
 	/**
 	 * フィールド：データベース接続オブジェクト
@@ -100,6 +101,26 @@ public class ProductDAO {
 		}
 		return bean;
 	}
+	
+	public List<Product> findByNameLikeKeyword(String keyword) throws SQLException {
+		
+		// 戻り値を宣言
+		List<Product> list = null;
+		try (// SQL実行オブジェクトの取得
+				 PreparedStatement pstmt = this.conn.prepareStatement(SQL_FIND_BY_NAME_LIKE_KEYWORD);
+				) {
+				// プレースホルダをパラメータに置換
+				pstmt.setString(1, "%" + keyword + "%");
+				try (// SQLの実行と結果セットの取得
+					 ResultSet rs = pstmt.executeQuery();
+					) {
+					// 結果セットを商品リストに変換
+					list = this.convertToList(rs);
+				}
+			}
+		return list;
+	}
+
 
 	/**
 	 * 結果セットの行を Product オブジェクトに変換し、インスタンスとして返す。
