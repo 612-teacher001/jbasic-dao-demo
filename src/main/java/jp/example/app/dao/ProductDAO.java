@@ -23,6 +23,7 @@ public class ProductDAO {
 	private static final String SQL_FIND_ALL = "SELECT * FROM products ORDER BY id";
 	private static final String SQL_FIND_BY_ID = "SELECT * FROM products WHERE id = ?";
 	private static final String SQL_FIND_BY_NAME_LIKE_KEYWORD = "SELECT * FROM products WHERE name LIKE ? ORDER BY id";
+	private static final String SQL_UPDATE = "UPDATE products SET category_id = ?, name = ?, price = ?, quantity = ? WHERE id = ?";
 	
 	/**
 	 * フィールド：データベース接続オブジェクト
@@ -102,13 +103,19 @@ public class ProductDAO {
 		return bean;
 	}
 	
+	/**
+	 * キーワードを含む商品名の商品を取得する
+	 * @param keyword 検索キーワード
+	 * @return 商品リスト
+	 * @throws SQLException
+	 */
 	public List<Product> findByNameLikeKeyword(String keyword) throws SQLException {
 		
 		// 戻り値を宣言
 		List<Product> list = null;
 		try (// SQL実行オブジェクトの取得
 				 PreparedStatement pstmt = this.conn.prepareStatement(SQL_FIND_BY_NAME_LIKE_KEYWORD);
-				) {
+			) {
 				// プレースホルダをパラメータに置換
 				pstmt.setString(1, "%" + keyword + "%");
 				try (// SQLの実行と結果セットの取得
@@ -119,6 +126,27 @@ public class ProductDAO {
 				}
 			}
 		return list;
+	}
+
+	/**
+	 * 指定した商品インスタンスで更新する
+	 * @param target 更新対象の商品インスタンス
+	 * @throws SQLException
+	 */
+	public void update(Product target) throws SQLException {
+		
+		try (// SQL実行オブジェクトの取得
+				 PreparedStatement pstmt = this.conn.prepareStatement(SQL_UPDATE);
+			) {
+				// プレースホルダをパラメータに置換
+				pstmt.setInt(1, target.getCategoryId());
+				pstmt.setString(2, target.getName());
+				pstmt.setInt(3, target.getPrice());
+				pstmt.setInt(4, target.getQuantity());
+				pstmt.setInt(5, target.getId());
+				// SQLの実行
+				pstmt.executeUpdate();
+		}
 	}
 
 
