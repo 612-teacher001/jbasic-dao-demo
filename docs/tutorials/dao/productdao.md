@@ -68,6 +68,18 @@ for (Product p : products) {
 }
 dao.close();
 ```
+### 3.3 商品更新：`ProductDAO#update(Product)` メソッド
+```java
+Product product = new Product(3, "妖怪村", 400);
+ProductDAO dao = new ProductDAO();
+dao.update(product);
+
+List<Product> products = dao.findAll();
+for (Product p : products) {
+    System.out.printf("%d: %s (%d円)\n", p.getId(), p.getName(), p.getPrice());
+}
+dao.close();
+```
 
 ### 3.2 注意点
 - SQLの実行時に問題が発生すると、`SQLException` がスローされます。
