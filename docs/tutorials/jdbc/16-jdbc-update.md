@@ -90,7 +90,7 @@ if (target == null) {
 - 商品が存在しない場合はプログラムを終了します。
 
 ### 手順-6. 商品を更新する
-#### 6-1. 更新情報を取得する
+#### 6-1. 更新情報を取得する<a id="step6"></a>
 ```java
 int categoryId = Keyboard.getInputNumber("カテゴリID（現在の値：" + target.getCategoryId() + "）：");
 String name = Keyboard.getInputString("商品名（現在の値：" + target.getName() + "）：");
