@@ -1,22 +1,84 @@
 plugins {
-	id 'application'
-	id 'war'
-	id 'eclipse-wtp'
+    id 'java'
+    id 'application'
+    id 'war'
+    id 'eclipse-wtp'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+eclipse {
+    wtp {
+        facet {
+            facet name: 'jst.web', version: '6.0'
+        }
+    }
 }
 
 application {
 	mainClass = 'jp.example.app.Main'
 }
 
-java.sourceCompatibility = 21
-eclipse.wtp.facet.facet name: 'jst.web', version: '6.0'
-repositories.mavenCentral()
-
-dependencies {
-	compileOnly 'org.apache.tomcat:tomcat-servlet-api:10.1.+'
-	runtimeOnly 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.+'
-	testImplementation 'org.mockito:mockito-junit-jupiter:5.+'
-	testing.suites.test.useJUnitJupiter('5.+')
-	configurations { testImplementation.extendsFrom compileOnly }
+repositories {
+    mavenCentral()
 }
 
+dependencies {
+	// Servlet / JSP
+    compileOnly 'org.apache.tomcat:tomcat-servlet-api:10.1.24'
+    runtimeOnly 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
+    
+    // JDBC Driver: PostgreSQL
+    implementation 'org.postgresql:postgresql:42.7.7'
+	
+	// JUnit etc..
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+    // テストではクラスが必要になるので testImplementation でも追加
+    testImplementation 'org.apache.tomcat:tomcat-servlet-api:10.1.24'
+}
+
+testing {
+    suites {
+        test {
+            useJUnitJupiter()
+        }
+    }
+}
+
+// DB作成（スーパーユーザで実行）
+task createDatabase(type: Exec) {
+	environment 'PGPASSWORD', 'postgres'
+	commandLine 'psql',
+		'-U', 'postgres',
+		'-d', 'postgres',
+		'-f', "${projectDir}/sql/01_create_database.sql"
+}
+
+// DLL適用（一般ユーザ）
+task createTables(type: Exec) {
+	environment 'PGPASSWORD', 'himitu'
+	commandLine 'psql',
+		'-U', 'student',
+		'-d', 'jbasicdaodb',
+		'-f', "${projectDir}/sql/02_create_tables.sql"
+}
+
+// サンプルレコードの投入（一般ユーザ）
+task insertRecords(type: Exec) {
+	environment 'PGPASSWORD', 'himitu'
+	commandLine 'psql',
+		'-U', 'student',
+		'-d', 'jbasicdaodb',
+		'-f', "${projectDir}/sql/03_insert_records.sql"
+}
+
+// まとめて実行
+task initAll {
+	dependsOn tasks.createDatabase, tasks.createTables, tasks.insertRecords
+}
