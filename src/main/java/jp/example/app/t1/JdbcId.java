@@ -37,17 +37,18 @@ public class JdbcId {
 		String sql = "SELECT * FROM products WHERE id = ?";
 		// 手順-4. データベース接続情報を取得
 		DbConfigure configure = new DbConfigure();
-		try (// 手順-5. データベース接続オブエジェクトを取得（例外処理と連動）
+		
+		Product product = null;
+		try (// 手順-5. データベース接続オブエジェクトを取得（例外処理対象）
 			 Connection conn = DriverManager.getConnection(configure.getUrl(), configure.getUser(), configure.getPassword());
-			 // 手順-6. SQL実行オブジェクトを取得（例外処理と連動）
+			 // 手順-6. SQL実行オブジェクトを取得（例外処理対象）
 			 PreparedStatement pstmt = conn.prepareStatement(sql);
 			) {
-			// 手順-7. SQLのプレースホルダを取得した商品IDで置換（例外処理と連動）
+			// 手順-7. SQLのプレースホルダを取得した商品IDで置換（例外処理対象）
 			pstmt.setInt(1, targetId);
-			// 手順-8. SQLの実行と結果セットの取得（例外処理と連動）
+			// 手順-8. SQLの実行と結果セットの取得（例外処理対象）
 			try (ResultSet rs = pstmt.executeQuery();) {
 				// 手順-9. 結果セットから商品インスタンスに変換
-				Product product = null;
 				if (rs.next()) {
 					int id = rs.getInt("id");
 					int categoryId = rs.getInt("category_id");
@@ -56,29 +57,31 @@ public class JdbcId {
 					int quantity = rs.getInt("quantity");
 					product = new Product(id, categoryId, name, price, quantity);
 				}
-				// 手順-10. 商品インスタンスのチェック
-				if (product == null) {
-					Display.showMessageln("指定されたIDの商品は見つかりませんでした。");
-					return;
-				}
-				// 手順-11. 商品インスタンスを表示
-				// 見出し行の表示
-				System.out.println(); // 区切り用の空行
-				System.out.printf("%-4s\t%-4s\t%-16s\t%-4s\t%-4s\n", 
-								  "商品ID", "カテゴリID", "商品名", "価格", "数量");
-				// 商品インスタンスの表示
-				System.out.printf("%-4d\t%-4d\t%-16s\t%-4d\t%-4d\n",
-						product.getId(),
-						product.getCategoryId(),
-						product.getName(),
-						product.getPrice(),
-						product.getQuantity()
-					 );
 			}
 		} catch (SQLException e) {
 			// 例外が発生した場合：スタックトレースを表示（必要最低限のエラー情報を表示）
 			e.printStackTrace();
+			return;
 		}
+		
+		// 手順-10. 商品インスタンスのチェック
+		if (product == null) {
+			Display.showMessageln("指定されたIDの商品は見つかりませんでした。");
+			return;
+		}
+		// 手順-11. 商品インスタンスを表示
+		// 見出し行の表示
+		System.out.println(); // 区切り用の空行
+		System.out.printf("%-4s\t%-4s\t%-16s\t%-4s\t%-4s\n", 
+						  "商品ID", "カテゴリID", "商品名", "価格", "数量");
+		// 商品インスタンスの表示
+		System.out.printf("%-4d\t%-4d\t%-16s\t%-4d\t%-4d\n",
+				product.getId(),
+				product.getCategoryId(),
+				product.getName(),
+				product.getPrice(),
+				product.getQuantity()
+			 );
 	}
 
 }
