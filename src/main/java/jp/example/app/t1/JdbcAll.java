@@ -33,23 +33,18 @@ public class JdbcAll {
 		// 手順-2. データベース接続情報を取得
 		DbConfigure configure = new DbConfigure();
 		
-		try {
-			// 手順-3. 接続情報をもとにデータベース接続オブジェクトを取得
-			Connection conn 
+		try (// 手順-3. 接続情報をもとにデータベース接続オブジェクトを取得
+			 Connection conn 
 				= DriverManager.getConnection(
 									 		  configure.getUrl(), 
 									 		  configure.getUser(), 
 									 		  configure.getPassword());
-			// 参考：configureの値を一時変数に代入して渡す方法
-			// String url = configure.getUrl(); 
-			// String username = configure.getUser(); 
-			// String password = configure.getPassword();
-			// Connection conn = DriverManager.getConnection(url, username, password);
 			
-			// 手順-4. SQL実行オブジェクトを取得
-			PreparedStatement pstmt = conn.prepareStatement(sql);
-			// 手順-5. SQLの実行と結果セットを取得
-			ResultSet rs = pstmt.executeQuery();
+			 // 手順-4. SQL実行オブジェクトを取得
+			 PreparedStatement pstmt = conn.prepareStatement(sql);
+			 // 手順-5. SQLの実行と結果セットを取得
+			 ResultSet rs = pstmt.executeQuery();
+			) {
 			// 手順-6. 結果セットから商品リストに変換
 			//   6-1. 商品リストを初期化
 			List<Product> productList = new ArrayList<Product>();
@@ -65,8 +60,6 @@ public class JdbcAll {
 				Product product = new Product(id, categoryId, name, price, quantity);
 				// 6-5. 商品インスタンスを商品リストに追加
 				productList.add(product);
-				// 参考：addメソッドの引数で直接インスタンス化する方法（6-4と6-5を統合する例）
-				// productList.add(new Product(id, categoryId, name, price, quantity));
 			}
 			// 手順-7. 商品リストのすべての要素を表示
 			//   7-1. 見出し行の表示
@@ -83,11 +76,6 @@ public class JdbcAll {
 									product.getQuantity()
 								 );
 			}
-			
-			// 手順-8. データベース接続関連のオブジェクトの解放
-			rs.close();
-			pstmt.close();
-			conn.close();
 			
 		} catch (SQLException e) {
 			// 手順-9. 例外処理の実行：スタックトレースを表示（必要最低限のエラー情報を表示）
