@@ -39,14 +39,14 @@ public class JdbcId {
 		DbConfigure configure = new DbConfigure();
 		
 		Product product = null;
-		try (// 手順-5. データベース接続オブエジェクトを取得（例外処理対象）
+		try (// 手順-5. データベース接続オブエジェクトを取得（例外処理対象：リソース自動解放のしくみで管理される）
 			 Connection conn = DriverManager.getConnection(configure.getUrl(), configure.getUser(), configure.getPassword());
 			 // 手順-6. SQL実行オブジェクトを取得（例外処理対象）
 			 PreparedStatement pstmt = conn.prepareStatement(sql);
 			) {
 			// 手順-7. SQLのプレースホルダを取得した商品IDで置換（例外処理対象）
 			pstmt.setInt(1, targetId);
-			// 手順-8. SQLの実行と結果セットの取得（例外処理対象）
+			// 手順-8. SQLの実行と結果セットの取得（例外処理対象：リソース自動解放のしくみで管理される）
 			try (ResultSet rs = pstmt.executeQuery();) {
 				// 手順-9. 結果セットから商品インスタンスに変換
 				if (rs.next()) {
