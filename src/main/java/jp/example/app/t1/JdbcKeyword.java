@@ -46,7 +46,7 @@ public class JdbcKeyword {
 		// 手順-4. データベース接続情報を取得
 		DbConfigure configure = new DbConfigure();
 		List<Product> productList = new ArrayList<>();
-		try (// 手順-5. データベース接続オブエジェクトを取得（例外処理対象：リソース自動解放のしくみで管理される）
+		try (// 手順-5. データベース接続オブジェクトを取得（例外処理対象：リソース自動解放のしくみで管理される）
 			 Connection conn = DriverManager.getConnection(configure.getUrl(), configure.getUser(), configure.getPassword());
 			 // 手順-6. SQL実行オブジェクトを取得（例外処理対象）
 			 PreparedStatement pstmt = conn.prepareStatement(sql);
