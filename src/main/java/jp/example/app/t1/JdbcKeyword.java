@@ -57,14 +57,7 @@ public class JdbcKeyword {
 				 ResultSet rs = pstmt.executeQuery();
 				) {
 				// 手順-9. 結果セットから商品リストに変換
-				while (rs.next()) {
-					int id = rs.getInt("id");
-					int categoryId = rs.getInt("category_id");
-					String name  = rs.getString("name");
-					int price = rs.getInt("price");
-					int quantity = rs.getInt("quantity");
-					productList.add(new Product(id, categoryId, name, price, quantity));
-				}
+				productList = convertToList(rs);
 			}
 			
 		} catch (SQLException e) {
@@ -79,6 +72,33 @@ public class JdbcKeyword {
 			return;
 		}
 		// 手順-11. 商品リストを表示
+		showProductList(productList);
+	}
+
+	/**
+	 * 結果セットから商品リストに変換する
+	 * @param rs 結果セット
+	 * @return 商品リスト
+	 * @throws SQLException
+	 */
+	public static List<Product> convertToList(ResultSet rs) throws SQLException {
+		List<Product> productList = new ArrayList<>();
+		while (rs.next()) {
+			int id = rs.getInt("id");
+			int categoryId = rs.getInt("category_id");
+			String name  = rs.getString("name");
+			int price = rs.getInt("price");
+			int quantity = rs.getInt("quantity");
+			productList.add(new Product(id, categoryId, name, price, quantity));
+		}
+		return productList;
+	}
+	
+	/**
+	 * 商品リストを表示する
+	 * @param productList
+	 */
+	public static void showProductList(List<Product> productList) {
 		// 件数の表示
 		Display.showMessageln("検索結果：" + productList.size() + "件の商品が見つかりました。");
 		// 見出し行の表示
