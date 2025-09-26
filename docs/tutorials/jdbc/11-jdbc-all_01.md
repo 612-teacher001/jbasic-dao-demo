@@ -95,7 +95,7 @@ PreparedStatement pstmt = conn.prepareStatement(sql);
 ```java
 ResultSet rs = pstmt.executeQuery();
 ```
-- SQLの実行は、`executeQuery()` と `executeUpdate()` の２つのメソッドがあります：
+- SQLの実行は、`executeQuery()` と `executeUpdate()` の２つのメソッドがあります：<a id="rs_execute"></a>
 
   | メソッド           | 実行されるSQLの種類                 | 戻り値(型)     | 備考                        |
   | ----------------- | ---------------------------------- | ------------- | --------------------------- |
