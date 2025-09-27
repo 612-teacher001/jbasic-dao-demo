@@ -70,7 +70,7 @@ public class JdbcUpdate {
 	 * @param target 更新対象商品インスタンス
 	 * @throws SQLException
 	 */
-	private static void updateProduct(Connection conn, Product target) throws SQLException {
+	public static void updateProduct(Connection conn, Product target) throws SQLException {
 		// 実行するSQLを取得
 		String sql = "UPDATE products SET category_id = ?, name = ?, price = ?, quantity = ? WHERE id = ?";
 		try (// SQL実行オブジェクトを取得
@@ -93,7 +93,7 @@ public class JdbcUpdate {
 	 * @return 指定された商品IDの商品が見つかった場合は商品インスタンス、それ以外はnull
 	 * @throws SQLException
 	 */
-	private static Product getProductById(Connection conn, int targetId) throws SQLException {
+	public static Product getProductById(Connection conn, int targetId) throws SQLException {
 		// 実行するSQLを設定
 		String sql = "SELECT * FROM products WHERE id = ?";
 		Product target = null;
