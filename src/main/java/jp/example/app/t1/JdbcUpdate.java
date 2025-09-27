@@ -28,30 +28,18 @@ public class JdbcUpdate {
 		
 		// 手順-4. データベース接続情報を取得
 		DbConfigure configure = new DbConfigure();
-		String sql = "";
 		try (// 手順-５. データベース接続オブジェクトを取得（例外処理対象：リソース自動解放のしくみで管理される）
 			 Connection conn = DriverManager.getConnection(configure.getUrl(), configure.getUser(), configure.getPassword());) {
-			// 手順-6. 実行するSQLを設定
-			sql = "SELECT * FROM products WHERE id = ?";
-			Product target = null;
-			try (// 手順-7. SQL実行オブジェクトを取得（例外処理対象）
-				 PreparedStatement pstmt = conn.prepareStatement(sql);) {
-				// 手順-8. SQLのプレースホルダを商品IDで置換（例外処理対象）
-				pstmt.setInt(1, targetId);
-				try (// 手順-9. SQLの実行と結果セットの取得
-					 ResultSet rs = pstmt.executeQuery();) {
-					// 手順-10. 結果セットから商品インスタンスに変換
-					List<Product> list = JdbcKeyword.convertToList(rs);
-					if (!list.isEmpty()) {
-						target = list.get(0);
-					}
-				}
-			}
+			
+			// 更新対象商品を取得（前回のチュートリアルの手順-6～手順-10までの処理をメソッド化）
+			Product target = getProductById(conn, targetId);
+			
 			// 手順-11. 商品の存在チェック：存在しない場合はメッセージを表示してプログラムを終了
 			if (target == null) {
 				Display.showMessageln("指定されたIDの商品は見つかりませんでした。");
 				return;
 			}
+			
 			// 手順-12. 更新情報を取得（カテゴリID、商品名、価格、数量）
 			int categoryId = Keyboard.getInputNumber("カテゴリID（現：" + target.getCategoryId() + "）：");
 			String name = Keyboard.getInputString("商品名（現：" + target.getName() + "）：");
@@ -62,19 +50,9 @@ public class JdbcUpdate {
 			target.setName(name);
 			target.setPrice(price);
 			target.setQuantity(quantity);
-			// 手順-14. 実行するSQLを取得
-			sql = "UPDATE products SET category_id = ?, name = ?, price = ?, quantity = ? WHERE id = ?";
-			try (// 手順-15. SQL実行オブジェクトを取得
-				 PreparedStatement pstmt = conn.prepareStatement(sql);) {
-				// 手順-16. SQLのプレースホルダを商品インスタンスのフィールド値で置換（例外処理対象）
-				pstmt.setInt(1, target.getCategoryId());
-				pstmt.setString(2, target.getName());
-				pstmt.setInt(3, target.getPrice());
-				pstmt.setInt(4, target.getQuantity());
-				pstmt.setInt(5, target.getId());
-				// 手順-17. SQLの実行
-				pstmt.executeUpdate();
-			}
+			
+			// 更新処理の実行（前回のチュートリアルの手順-14～手順-17までの処理をメソッド化）
+			updateProduct(conn, target);
 			
 		} catch (SQLException e) {
 			// 例外が発生した場合：スタックトレースを表示（必要最低限のエラー情報を表示）
@@ -84,6 +62,55 @@ public class JdbcUpdate {
 		// 手順-17. 商品リストを表示
 		System.out.println();
 		JdbcAll.main(new String[] {});
+	}
+
+	/**
+	 * 商品を更新する
+	 * @param conn データベース接続オブエジェクト
+	 * @param target 更新対象商品インスタンス
+	 * @throws SQLException
+	 */
+	private static void updateProduct(Connection conn, Product target) throws SQLException {
+		// 実行するSQLを取得
+		String sql = "UPDATE products SET category_id = ?, name = ?, price = ?, quantity = ? WHERE id = ?";
+		try (// SQL実行オブジェクトを取得
+			 PreparedStatement pstmt = conn.prepareStatement(sql);) {
+			// SQLのプレースホルダを商品インスタンスのフィールド値で置換（例外処理対象）
+			pstmt.setInt(1, target.getCategoryId());
+			pstmt.setString(2, target.getName());
+			pstmt.setInt(3, target.getPrice());
+			pstmt.setInt(4, target.getQuantity());
+			pstmt.setInt(5, target.getId());
+			// SQLの実行
+			pstmt.executeUpdate();
+		}
+	}
+
+	/**
+	 * 指定されたIDの商品を取得する
+	 * @param conn データベース接続オブエジェクト
+	 * @param targetId 取得する商品のID
+	 * @return 指定された商品IDの商品が見つかった場合は商品インスタンス、それ以外はnull
+	 * @throws SQLException
+	 */
+	private static Product getProductById(Connection conn, int targetId) throws SQLException {
+		// 実行するSQLを設定
+		String sql = "SELECT * FROM products WHERE id = ?";
+		Product target = null;
+		try (// SQL実行オブジェクトを取得（例外処理対象）
+			 PreparedStatement pstmt = conn.prepareStatement(sql);) {
+			// SQLのプレースホルダを商品IDで置換（例外処理対象）
+			pstmt.setInt(1, targetId);
+			try (// SQLの実行と結果セットの取得
+				 ResultSet rs = pstmt.executeQuery();) {
+				// 結果セットから商品インスタンスに変換
+				List<Product> list = JdbcKeyword.convertToList(rs);
+				if (!list.isEmpty()) {
+					target = list.get(0);
+				}
+			}
+		}
+		return target;
 	}
 
 }
