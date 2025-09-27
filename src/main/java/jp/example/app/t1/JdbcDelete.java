@@ -34,15 +34,9 @@ public class JdbcDelete {
 				Display.showMessageln("指定されたIDの商品は見つかりませんでした。");
 				return;
 			}
-			// 手順-8. 実行するSQLの設定
-			String sql = "DELETE FROM products WHERE id = ?";
-			try (// 手順-9. SQL実行オブジェクトを取得
-				 PreparedStatement pstmt = conn.prepareStatement(sql);) {
-				// 手順-10. SQLのプレースホルダを商品IDで置換
-				pstmt.setInt(1, targetId);
-				// 手順-11. SQLの実行
-				pstmt.executeUpdate();
-			}
+			// 削除を実行
+			deleteById(conn, targetId);
+			
 		} catch (SQLException e) {
 			// 例外が発生した場合：スタックトレースを表示（必要最低限のエラー情報を表示）
 			e.printStackTrace();
@@ -52,6 +46,25 @@ public class JdbcDelete {
 		System.out.println();
 		JdbcAll.main(new String[] {});
 
+	}
+
+	/**
+	 * 指定した商品IDの商品を削除する
+	 * @param conn データベース接続オブジェクト
+	 * @param targetId 削除する商品のID
+	 * @throws SQLException
+	 */
+	private static void deleteById(Connection conn, int targetId) throws SQLException {
+		// 実行するSQLの設定
+		String sql = "DELETE FROM products WHERE id = ?";
+		try (// SQL実行オブジェクトを取得
+			 PreparedStatement pstmt = conn.prepareStatement(sql);) {
+			// SQLのプレースホルダを商品IDで置換
+			pstmt.setInt(1, targetId);
+			// SQLの実行
+			pstmt.executeUpdate();
+		}
+		
 	}
 
 }
