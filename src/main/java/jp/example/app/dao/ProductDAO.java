@@ -14,7 +14,7 @@ import jp.example.app.provided.configure.DbConfigure;
 /**
  * productsテーブルにアクセスするDAO
  */
-public class ProductDAO {
+public class ProductDAO implements AutoCloseable {
 
 	/**
 	 * クラス定数
@@ -53,6 +53,7 @@ public class ProductDAO {
 	 * データベース接続オブジェクトを破棄する
 	 * @throws SQLException
 	 */
+	@Override
 	public void close() throws SQLException {
 		if (this.conn != null) {
 			this.conn.close();
