@@ -5,8 +5,8 @@
 ---
 ### 今回のチュートリアル対象
 
-- コミット：なし
-- クラス：なし
+- コミット：[4f1daeb](https://github.com/612-teacher001/jbasic-dao-demo/commit/4f1daeb)
+- クラス：[`jp.example.app.t2.daoAll`](https://github.com/612-teacher001/jbasic-dao-demo/blob/main/src/main/java/jp/example/app/t2/DaoAll.java)
 
 ---
 
