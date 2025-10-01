@@ -1,0 +1,30 @@
+@startuml Product
+left to right direction
+
+class Product {
+  ' フィールド
+  {field} -id: int
+  {field} -categoryid: int
+  {field} -name: String
+  {field} -price: int
+  {field} -quantity: int
+  '
+  ' コンストラクタ群
+  {method} +Product()
+  {method} +Product(id: int, categoryId: int, name: String, price: int, quantity: int)
+  {method} +Product(categoryId: int, name: String, price: int, quantity: int)
+  '
+  ' アクセサメソッド群
+  {method} +setId(id: int): void
+  {method} +getId(): int
+  {method} +setCategoryId(categoryId: int): void
+  {method} +getCategoryId(): int
+  {method} +setName(name: String): void
+  {method} +getName(): String
+  {method} +setPrice(price: int): void
+  {method} +getPrice(): int
+  {method} +setQuantity(quantity: int): void
+  {method} +getQuantity(): int
+}
+
+@enduml

@@ -1,0 +1,40 @@
+@startuml ProductDAO
+left to right direction
+
+interface AutoCloseable {
+  ' 抽象メソッド
+  {method} +close(): void
+}
+
+class BaseDAO {
+  {static} -DB_CONFIG: DbConfigure
+  {field}  #Connection conn
+  '
+  ' コンストラクタ
+  {method} +BaseDAO()
+  '
+  ' 限定公開メソッド：継承クラスからの利用のみ許可
+  {method} #close(): void
+  '
+  ' 内部メソッド
+  {method} -getConnection(): void
+}
+
+class ProductsDAO {
+  {static} -SQL_ALL_FIND: String = "SELECT * FROM products ORDER BY id"
+  {method} +findAll(): List<Product>
+  {method} -convertToList(rs: ResultSet): List<Product>
+}
+
+' 継承関係
+AutoCloseable <|. BaseDAO
+BaseDAO <|- ProductsDAO
+
+/'
+note right of BaseDAO::close
+  AutoCloseable の close() をオーバーライドしています。
+  これは BaseDAO がリソースを正しく解放するために必要です。
+end note
+'/
+
+@enduml
