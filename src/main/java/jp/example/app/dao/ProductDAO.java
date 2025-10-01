@@ -18,7 +18,6 @@ public class ProductDAO extends BaseDAO {
 	 */
 	// SQL文字列群
 	private static final String SQL_FIND_ALL = "SELECT * FROM products ORDER BY id";
-	private static final String SQL_FIND_BY_ID = "SELECT * FROM products WHERE id = ?";
 	
 	/**
 	 * コンストラクタ：データベース接続オブジェクトを取得する
