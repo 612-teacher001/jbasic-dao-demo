@@ -11,7 +11,7 @@ import jp.example.app.provided.io.Display;
 public class Utils {
 	/**
 	 * 商品リストを表示する
-	 * @param productList
+	 * @param productList 表示する商品リスト
 	 */
 	public static void showProductList(List<Product> productList) {
 		// 件数の表示

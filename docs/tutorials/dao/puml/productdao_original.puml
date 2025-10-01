@@ -1,0 +1,20 @@
+@startuml ProductDAO_original
+left to right direction
+
+class ProductDAO {
+  {static} -SQL_FIND_ALL: String = "SELECT * FROM products ORDER BY id"
+  {field}  +conn: Connection
+  '
+  ' コンストラクタ
+  {method} +ProductDAO()
+  '
+  ' 公開メソッド
+  {method} +findAll(): List<Product>
+  {method} +close(): void
+  '
+  ' 内部メソッド
+  {method} -getConnection(): void
+  {method} -convertToList(rs: ResultSet): List<Product>
+}
+
+@enduml
