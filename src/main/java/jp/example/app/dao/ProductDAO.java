@@ -87,7 +87,7 @@ public class ProductDAO extends BaseDAO {
 	private Product convertToProduct(ResultSet rs) throws SQLException {
 		// 1. 戻り値の初期化
 		Product product = null;
-		// 2. 結果セットの現在行を商品インスタンスに変換：convertProductメソッドの呼び出し
+		// 2. 結果セットの現在行を商品インスタンスに変換：createProductメソッドの呼び出し
 		if (rs.next()) {
 			// 3. 現在の行の各フィールド値を取得
 			product = this.createProduct(rs);
