@@ -78,27 +78,21 @@ public class ProductDAO extends BaseDAO {
 	 *   1. 結果セットの1行を読み込む
 	 *   2. 商品の各フィールド値を取得
 	 *   3. Product オブジェクトを作成
-	 *   4. 作成した Product をリストに追加
+	 *   4. 作成した Product オブジェクトを返却
 	 * 
 	 * @param rs 結果セット
-	 * @return 商品リスト
+	 * @return 商品インスタンス
 	 * @throws SQLException 結果セット処理でエラーが発生した場合
 	 */
 	private Product convertToProduct(ResultSet rs) throws SQLException {
 		// 1. 戻り値の初期化
 		Product product = null;
-		// 2. 結果セットを商品リストに変換：convertToListメソッドの呼び出し
+		// 2. 結果セットの現在行を商品インスタンスに変換：convertProductメソッドの呼び出し
 		if (rs.next()) {
 			// 3. 現在の行の各フィールド値を取得
-			int id = rs.getInt("id");                 // 商品ID（id）
-			int categoryId =rs.getInt("category_id"); // カテゴリID（categoryId）
-			String name = rs.getString("name");       // 商品名（name）
-			int price = rs.getInt("price");           // 価格（price）
-			int quantity = rs.getInt("quantity");     // 数量（quantity）
-			// 4. 取得したフィールド値での商品クラスのインスタンス化と商品リストへの追加を同時に実施
-			return new Product(id, categoryId, name, price, quantity);
+			product = this.createProduct(rs);
 		}
-		// 3. 戻り値の返却
+		// 4. 戻り値の返却
 		return product;
 	}
 	
@@ -108,28 +102,38 @@ public class ProductDAO extends BaseDAO {
 	 *   1. 結果セットの各行を順に読み込む
 	 *   2. 商品の各フィールド値を取得
 	 *   3. Product オブジェクトを作成
-	 *   4. 作成した Product をリストに追加
+	 *   4. 作成した Product オブジェクトをリストに追加
 	 * 
 	 * @param rs 結果セット
 	 * @return 商品リスト
 	 * @throws SQLException 結果セット処理でエラーが発生した場合
 	 */
-	protected List<Product> convertToList(ResultSet rs) throws SQLException {
+	private List<Product> convertToList(ResultSet rs) throws SQLException {
 		// 1. 戻り値の初期化
 		List<Product> list = new ArrayList<>();
 		// 2. 結果セットの１行ごとの読み込み
 		while (rs.next()) {
 			// 3. 現在の行の各フィールド値を取得
-			int id = rs.getInt("id");                 // 商品ID（id）
-			int categoryId =rs.getInt("category_id"); // カテゴリID（categoryId）
-			String name = rs.getString("name");       // 商品名（name）
-			int price = rs.getInt("price");           // 価格（price）
-			int quantity = rs.getInt("quantity");     // 数量（quantity）
-			// 4. 取得したフィールド値での商品クラスのインスタンス化と商品リストへの追加を同時に実施
-			list.add(new Product(id, categoryId, name, price, quantity));
+			Product product = this.createProduct(rs);
+			list.add(product);
 		}
-		// 5. 戻り値の返却
+		// 4. 戻り値の返却
 		return list;
+	}
+
+	/**
+	 * 結果リストの現在の行から商品インスタンスを生成する
+	 * @param rs 現在の行を指し示す結果セット
+	 * @return 商品インスタンス
+	 * @throws SQLException 結果セット処理でエラーが発生した場合
+	 */
+	private Product createProduct(ResultSet rs) throws SQLException {
+		int id = rs.getInt("id");                  // 商品ID（id）
+		int categoryId = rs.getInt("category_id"); // カテゴリID（categoryId）
+		String name = rs.getString("name");        // 商品名（name）
+		int price = rs.getInt("price");            // 価格（price）
+		int quantity = rs.getInt("quantity");      // 数量（quantity）
+		return new Product(id, categoryId, name, price, quantity);
 	}
 
 }

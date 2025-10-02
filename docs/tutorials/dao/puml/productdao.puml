@@ -28,6 +28,8 @@ class ProductsDAO {
   {method} +findAll(): List<Product>
   ' 補助メソッド（非公開）
   {method} -convertToList(rs: ResultSet): List<Product>
+  {method} -convertToProduct(rs: ResultSet): Product
+  {method} -createProduct(rs: ResultSet): Product
 }
 
 ' 継承関係
