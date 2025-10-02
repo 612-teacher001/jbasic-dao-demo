@@ -65,7 +65,7 @@ public class ProductDAO extends BaseDAO {
 			try (// 4. SQLの実行と結果セットの取得
 				 ResultSet rs = pstmt.executeQuery();) {
 				// 5. 結果セットを商品インスタンスに変換
-				product = convertToProduct(rs);
+				product = this.convertToProduct(rs);
 			}
 		}
 		// 6. 戻り値の返却
