@@ -19,6 +19,7 @@ public class ProductDAO extends BaseDAO {
 	// SQL文字列群
 	private static final String SQL_FIND_ALL = "SELECT * FROM products ORDER BY id";
 	private static final String SQL_FIND_BY_ID = "SELECT * FROM products WHERE id = ?";
+	private static final String SQL_FIND_BY_NAME_LIKE = "SELECT * FROM products WHERE NAME LIKE ?";
 	
 	/**
 	 * コンストラクタ：データベース接続オブジェクトを取得する
@@ -61,7 +62,6 @@ public class ProductDAO extends BaseDAO {
 			 PreparedStatement  pstmt = this.conn.prepareStatement(SQL_FIND_BY_ID);) {
 			// 3. プレースホルダをパラメータで置換
 			pstmt.setInt(1, targetId);
-			
 			try (// 4. SQLの実行と結果セットの取得
 				 ResultSet rs = pstmt.executeQuery();) {
 				// 5. 結果セットを商品インスタンスに変換
@@ -70,6 +70,30 @@ public class ProductDAO extends BaseDAO {
 		}
 		// 6. 戻り値の返却
 		return product;
+	}
+
+	/**
+	 * 指定されたキーワードが含まれる商品名の商品を取得する
+	 * @param keyword 検索キーワード
+	 * @return 商品リスト
+	 * @throws SQLException
+	 */
+	public List<Product> findByNameLike(String keyword) throws SQLException {
+		// 1. 戻り値の初期化
+		List<Product> list = null;
+		try (// 2. SQL実行オブジェクトの取得
+			 PreparedStatement pstmt = this.conn.prepareStatement(SQL_FIND_BY_NAME_LIKE);) {
+			// 3. プレースホルダをパラメータにで置換
+			pstmt.setString(1, "%" + keyword + "%");
+			// 4. SQLの実行と結果セットの取得
+			try (// 5. 結果セットを商品リストに変換
+				 ResultSet rs = pstmt.executeQuery();) {
+				// 5. 結果セットを商品リストに変換
+				list = this.convertToList(rs);
+			}
+		}
+		// 戻り値の返却
+		return list;
 	}
 
 	/**
