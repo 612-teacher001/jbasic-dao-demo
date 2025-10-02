@@ -18,6 +18,7 @@ public class ProductDAO extends BaseDAO {
 	 */
 	// SQL文字列群
 	private static final String SQL_FIND_ALL = "SELECT * FROM products ORDER BY id";
+	private static final String SQL_FIND_BY_ID = "SELECT * FROM products WHERE id = ?";
 	
 	/**
 	 * コンストラクタ：データベース接続オブジェクトを取得する
@@ -46,7 +47,61 @@ public class ProductDAO extends BaseDAO {
 		// 5. 戻り値の返却
 		return list;
 	}
+	
+	/**
+	 * 指定された商品IDの商品を取得する
+	 * @param targetId 検索する商品のID
+	 * @return 検索する商品のIDと合致する商品が見つかった場合は商品インスタンス、それ以外はnull
+	 * @throws SQLException 
+	 */
+	public Product findById(int targetId) throws SQLException {
+		// 1. 戻り値の初期化
+		Product product = null;
+		try (// 2. SQL実行オブジェクトを取得
+			 PreparedStatement  pstmt = this.conn.prepareStatement(SQL_FIND_BY_ID);) {
+			// 3. プレースホルダをパラメータで置換
+			pstmt.setInt(1, targetId);
+			
+			try (// 4. SQLの実行と結果セットの取得
+				 ResultSet rs = pstmt.executeQuery();) {
+				// 5. 結果セットを商品インスタンスに変換
+				product = this.convertToProduct(rs);
+			}
+		}
+		// 6. 戻り値の返却
+		return product;
+	}
 
+	/**
+	 * 結果セットから商品インスタンスに変換する
+	 * 処理内容：
+	 *   1. 結果セットの1行を読み込む
+	 *   2. 商品の各フィールド値を取得
+	 *   3. Product オブジェクトを作成
+	 *   4. 作成した Product をリストに追加
+	 * 
+	 * @param rs 結果セット
+	 * @return 商品リスト
+	 * @throws SQLException 結果セット処理でエラーが発生した場合
+	 */
+	private Product convertToProduct(ResultSet rs) throws SQLException {
+		// 1. 戻り値の初期化
+		Product product = null;
+		// 2. 結果セットを商品リストに変換：convertToListメソッドの呼び出し
+		if (rs.next()) {
+			// 3. 現在の行の各フィールド値を取得
+			int id = rs.getInt("id");                 // 商品ID（id）
+			int categoryId =rs.getInt("category_id"); // カテゴリID（categoryId）
+			String name = rs.getString("name");       // 商品名（name）
+			int price = rs.getInt("price");           // 価格（price）
+			int quantity = rs.getInt("quantity");     // 数量（quantity）
+			// 4. 取得したフィールド値での商品クラスのインスタンス化と商品リストへの追加を同時に実施
+			return new Product(id, categoryId, name, price, quantity);
+		}
+		// 3. 戻り値の返却
+		return product;
+	}
+	
 	/**
 	 * 結果セットから商品リストに変換する
 	 * 処理内容：
