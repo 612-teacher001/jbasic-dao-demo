@@ -20,6 +20,7 @@ public class ProductDAO extends BaseDAO {
 	private static final String SQL_FIND_ALL = "SELECT * FROM products ORDER BY id";
 	private static final String SQL_FIND_BY_ID = "SELECT * FROM products WHERE id = ?";
 	private static final String SQL_FIND_BY_NAME_LIKE = "SELECT * FROM products WHERE NAME LIKE ?";
+	private static final String SQL_INSERT = "INSERT INTO products (category_id, name, price, quantity) VALUES (?, ?, ?, ?)";
 	
 	/**
 	 * コンストラクタ：データベース接続オブジェクトを取得する
@@ -94,6 +95,24 @@ public class ProductDAO extends BaseDAO {
 		}
 		// 戻り値の返却
 		return list;
+	}
+
+	/**
+	 * 商品を登録する
+	 * @param product 登録対象商品インスタンス
+	 * @throws SQLException 結果セット処理でエラーが発生した場合
+	 */
+	public void insert(Product product) throws SQLException {
+		try (// 1. SQL実行オブジェクトを取得
+			 PreparedStatement pstmt = this.conn.prepareStatement(SQL_INSERT)) {
+			// 2. プレースホルダをパラメータに置換
+			pstmt.setInt(1, product.getCategoryId());
+			pstmt.setString(2, product.getName());
+			pstmt.setInt(3, product.getPrice());
+			pstmt.setInt(4, product.getQuantity());
+			// 3. SQSLの実行
+			pstmt.executeUpdate();
+		}
 	}
 
 	/**

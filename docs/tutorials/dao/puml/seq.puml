@@ -1,0 +1,22 @@
+@startuml productdao_overview
+
+actor User
+User -> DaoInsert: main()
+
+== 初期一覧の表示 ==
+DaoInsert -> ProductDAO: findAll()
+ProductDAO --> DaoInsert: productList
+DaoInsert -> DaoInsert: Utils.showProductList(productList)
+
+== 商品の入力・登録 ==
+DaoInsert -> DaoInsert: 入力受付（カテゴリID・商品名・価格・数量）
+DaoInsert -> Product: new Product(...)
+Product --> DaoInsert: product
+DaoInsert -> ProductDAO: insert(product)
+
+== 登録後の一覧表示 ==
+DaoInsert -> ProductDAO: findAll()
+ProductDAO --> DaoInsert: productList
+DaoInsert -> DaoInsert: Utils.showProductList(productList)
+
+@enduml
