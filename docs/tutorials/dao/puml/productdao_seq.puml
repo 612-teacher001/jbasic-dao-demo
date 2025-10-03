@@ -1,0 +1,35 @@
+@startuml productdao_seq
+
+actor user
+user -> DaoInsert: main(new String[]{})
+
+DaoInsert -> ProductDAO: 1: dao = new ProductDAO()
+
+== 初期一覧の表示 ==
+DaoInsert -> ProductDAO: 2-1: productList = findAll()
+' ProductDAO --> DaoInsert: productList
+DaoInsert -> DaoInsert: 2-2: Utils.showProductList(productList)
+
+== 商品の入力・登録 ==
+DaoInsert -> DaoInsert: 3: Display.showMessageln("【商品登録】")
+DaoInsert -> DaoInsert: 4: 入力受付（カテゴリID・商品名・価格・数量）
+/'
+DaoInsert -> DaoInsert: 4-1: categoryId = Keyboard.getInputNumber("カテゴリID：")
+DaoInsert -> DaoInsert: 4-2: name = Keyboard.getInputString("商品名：")
+DaoInsert -> DaoInsert: 4-3: price = Keyboard.getInputNumber("価格：")
+DaoInsert -> DaoInsert: 4-4: quantity = Keyboard.getInputNumber("数量：")
+'/
+
+DaoInsert -> Product: 5: product = new Product(categoryId, name, price, quantity)
+' Product --> DaoInsert: product
+
+DaoInsert -> ProductDAO: 6: insert(product)
+
+== 登録後の一覧表示 ==
+DaoInsert -> ProductDAO: 7: productList = findAll()
+' ProductDAO --> DaoInsert: productList
+DaoInsert -> DaoInsert: 8: Utils.showProductList(productList)
+
+
+
+@enduml
