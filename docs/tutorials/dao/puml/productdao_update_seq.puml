@@ -1,0 +1,27 @@
+@startuml productdao_seq
+
+actor user
+user -> DaoInsert: main(new String[]{})
+
+DaoInsert -> ProductDAO: 1: dao = new ProductDAO()
+
+== 2. 初期一覧の表示 ==
+DaoInsert -> ProductDAO: 2-1: productList = findAll()
+DaoInsert -> DaoInsert:  2-2: Utils.showProductList(productList)
+
+== 3. 更新対象商品のID取得・更新対象商品の取得 ==
+DaoInsert -> DaoInsert:  3-1: Display.showMessageln("【商品更新】")
+DaoInsert -> DaoInsert:  3-2: 入力受付（商品ID）
+DaoInsert -> ProductDAO: 3-3: product = findById(targetId)
+DaoInsert -> DaoInsert:  3-4: 更新対象商品の存在チェック
+
+== 4. 更新情報の入力・更新 ==
+DaoInsert -> DaoInsert:  4-1: 更新情報の入力受付（カテゴリID・商品名・価格・数量）
+DaoInsert -> DaoInsert:  4-2: 更新対象商品の再設定（カテゴリID・商品名・価格・数量）
+DaoInsert -> ProductDAO: 4-3: update(product)
+
+== 5. 更新後の一覧表示 ==
+DaoInsert -> ProductDAO: 5-1: productList = findAll()
+DaoInsert -> DaoInsert:  5-2: Utils.showProductList(productList)
+
+@enduml
