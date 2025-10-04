@@ -201,18 +201,18 @@ public class ProductDAO extends BaseDAO {
 		}
 		
 		try (// 2. SQL実行オブジェクトを取得
-				 PreparedStatement pstmt = this.conn.prepareStatement(sql)) {
-				// 3. プレースホルダをパラメータに置換
-				pstmt.setInt(1, product.getCategoryId());
-				pstmt.setString(2, product.getName());
-				pstmt.setInt(3, product.getPrice());
-				pstmt.setInt(4, product.getQuantity());
-				if (sql.equals(SQL_UPDATE)) {
-					pstmt.setInt(5, product.getId()); // 絞り込み条件のプレースホルダの
-				}
-				// 4. SQLの実行
-				pstmt.executeUpdate();
+			 PreparedStatement pstmt = this.conn.prepareStatement(sql)) {
+			// 3. プレースホルダをパラメータに置換
+			pstmt.setInt(1, product.getCategoryId());
+			pstmt.setString(2, product.getName());
+			pstmt.setInt(3, product.getPrice());
+			pstmt.setInt(4, product.getQuantity());
+			if (sql.equals(SQL_UPDATE)) {
+				pstmt.setInt(5, product.getId()); // 絞り込み条件のプレースホルダの
 			}
+			// 4. SQLの実行
+			pstmt.executeUpdate();
 		}
+	}
 	
 }
