@@ -1,0 +1,25 @@
+@startuml productdao_seq
+
+actor user
+user -> DaoUpdate: main(new String[]{})
+
+DaoUpdate -> ProductDAO: 1: dao = new ProductDAO()
+
+== 2. 初期一覧の表示 ==
+DaoUpdate -> ProductDAO: 2-1: productList = findAll()
+DaoUpdate -> DaoUpdate:  2-2: Utils.showProductList(productList)
+
+== 3. 削除対象商品のID取得・削除対象商品の取得 ==
+DaoUpdate -> DaoUpdate:  3-1: Display.showMessageln("【商品削除】")
+DaoUpdate -> DaoUpdate:  3-2: 入力受付（商品ID）
+DaoUpdate -> ProductDAO: 3-3: product = findById(targetId)
+DaoUpdate -> DaoUpdate:  3-4: 削除対象商品の存在チェック
+
+== 4. 削除 ==
+DaoUpdate -> ProductDAO: 4-1: deleteById(targetId)
+
+== 5. 削除後の一覧表示 ==
+DaoUpdate -> ProductDAO: 5-1: productList = findAll()
+DaoUpdate -> DaoUpdate:  5-2: Utils.showProductList(productList)
+
+@enduml
