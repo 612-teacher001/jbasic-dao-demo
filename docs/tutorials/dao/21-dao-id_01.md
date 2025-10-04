@@ -142,8 +142,6 @@ public class ProductDAO extends BaseDAO {
   - `convertToList(ResultSet)` メソッド、`convertToProduct(ResultSet)` メソッド内で商品インスタンスを生成する処理が重複している  
   　　⇒ 【解決策】結果セットから商品インスタンスを生成する新たな補助メソッドを定義し利用する
 
-
-
 ---
 
 [Javaによるデータベース接続とCRUD操作のチュートリアル](../tutorials.md) > [DAOによるCRUD操作](./20-dao.md)
