@@ -104,16 +104,8 @@ public class ProductDAO extends BaseDAO {
 	 * @throws SQLException 結果セット処理でエラーが発生した場合
 	 */
 	public void insert(Product product) throws SQLException {
-		try (// 1. SQL実行オブジェクトを取得
-			 PreparedStatement pstmt = this.conn.prepareStatement(SQL_INSERT)) {
-			// 2. プレースホルダをパラメータに置換
-			pstmt.setInt(1, product.getCategoryId());
-			pstmt.setString(2, product.getName());
-			pstmt.setInt(3, product.getPrice());
-			pstmt.setInt(4, product.getQuantity());
-			// 3. SQSLの実行
-			pstmt.executeUpdate();
-		}
+		// 商品スタンスを引数として渡してProductDAO#insert() メソッドの呼出し
+		this.saveProduct(product);
 	}
 
 	/**
@@ -122,17 +114,8 @@ public class ProductDAO extends BaseDAO {
 	 * @throws SQLException 結果セット処理でエラーが発生した場合
 	 */
 	public void update(Product product) throws SQLException {
-		try (// 1. SQL実行オブジェクトを取得
-			 PreparedStatement pstmt = this.conn.prepareStatement(SQL_UPDATE);) {
-			// 2. プレースホルダをパラメータに置換
-			pstmt.setInt(1, product.getCategoryId());
-			pstmt.setString(2, product.getName());
-			pstmt.setInt(3, product.getPrice());
-			pstmt.setInt(4, product.getQuantity());
-			pstmt.setInt(5, product.getId());
-			// 3. SQLの実行
-			pstmt.executeUpdate();
-		}
+		// 商品スタンスを引数として渡してProductDAO#insert() メソッドの呼出し
+		this.saveProduct(product);
 	}
 
 	/**
@@ -199,4 +182,37 @@ public class ProductDAO extends BaseDAO {
 		return new Product(id, categoryId, name, price, quantity);
 	}
 
+	/**
+	 * 商品を保存する
+	 * 引数の商品インスタンスのidが0なら登録、それ以外なら更新が実行される
+	 * @param product 処理対象の商品インスタンス
+	 * @throws SQLException 結果セット処理でエラーが発生した場合
+	 */
+	private void saveProduct(Product product) throws SQLException {
+		// 1. 実行するSQLの取得
+		String sql = "";
+		if (product.getId() == 0) {
+			// 登録の場合
+			sql = SQL_INSERT;
+		} else {
+			// 更新の場合
+			sql = SQL_UPDATE;
+		
+		}
+		
+		try (// 2. SQL実行オブジェクトを取得
+				 PreparedStatement pstmt = this.conn.prepareStatement(sql)) {
+				// 3. プレースホルダをパラメータに置換
+				pstmt.setInt(1, product.getCategoryId());
+				pstmt.setString(2, product.getName());
+				pstmt.setInt(3, product.getPrice());
+				pstmt.setInt(4, product.getQuantity());
+				if (sql.equals(SQL_UPDATE)) {
+					pstmt.setInt(5, product.getId()); // 絞り込み条件のプレースホルダの
+				}
+				// 4. SQLの実行
+				pstmt.executeUpdate();
+			}
+		}
+	
 }
