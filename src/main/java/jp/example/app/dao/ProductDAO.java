@@ -22,6 +22,7 @@ public class ProductDAO extends BaseDAO {
 	private static final String SQL_FIND_BY_NAME_LIKE = "SELECT * FROM products WHERE NAME LIKE ?";
 	private static final String SQL_INSERT = "INSERT INTO products (category_id, name, price, quantity) VALUES (?, ?, ?, ?)";
 	private static final String SQL_UPDATE = "UPDATE products SET category_id = ?, name = ?, price = ?, quantity = ? WHERE id = ?";
+	private static final String SQL_DELETE_BY_ID = "DELETE FROM products WHERE id = ?";
 	
 	/**
 	 * コンストラクタ：データベース接続オブジェクトを取得する
@@ -119,6 +120,21 @@ public class ProductDAO extends BaseDAO {
 	}
 
 	/**
+	 * 指定されたIDの商品を削除する
+	 * @param id 削除対象の商品ID
+	 * @throws SQLException 結果セット処理でエラーが発生した場合
+	 */
+	public void deleteById(int id) throws SQLException {
+		try (// 1. SQL実行オブジェクトの取得
+			 PreparedStatement pstmt = this.conn.prepareStatement(SQL_DELETE_BY_ID);) {
+			// 2. プレースホルダをパラメータで置換
+			pstmt.setInt(1, id);
+			// 3. SQLの実行
+			pstmt.executeUpdate();
+		}
+	}
+	
+	/**
 	 * 結果セットから商品インスタンスに変換する
 	 * 処理内容：
 	 *   1. 結果セットの1行を読み込む
@@ -214,5 +230,5 @@ public class ProductDAO extends BaseDAO {
 			pstmt.executeUpdate();
 		}
 	}
-	
+
 }

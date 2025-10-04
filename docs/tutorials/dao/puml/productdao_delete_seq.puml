@@ -1,0 +1,25 @@
+@startuml productdao_seq
+
+actor user
+user -> DaoDelete: main(new String[]{})
+
+DaoDelete -> ProductDAO: 1: dao = new ProductDAO()
+
+== 2. 初期一覧の表示 ==
+DaoDelete -> ProductDAO: 2-1: productList = findAll()
+DaoDelete -> DaoDelete:  2-2: Utils.showProductList(productList)
+
+== 3. 削除対象商品のID取得・削除対象商品の取得 ==
+DaoDelete -> DaoDelete:  3-1: Display.showMessageln("【商品削除】")
+DaoDelete -> DaoDelete:  3-2: 入力受付（商品ID）
+DaoDelete -> ProductDAO: 3-3: product = findById(targetId)
+DaoDelete -> DaoDelete:  3-4: 削除対象商品の存在チェック
+
+== 4. 削除 ==
+DaoDelete -> ProductDAO: 4-1: deleteById(targetId)
+
+== 5. 削除後の一覧表示 ==
+DaoDelete -> ProductDAO: 5-1: productList = findAll()
+DaoDelete -> DaoDelete:  5-2: Utils.showProductList(productList)
+
+@enduml
