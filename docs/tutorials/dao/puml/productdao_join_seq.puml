@@ -1,0 +1,15 @@
+@startuml productdao_seq
+
+actor user
+user -> DaoJoin: main(new String[]{})
+
+DaoJoin -> ProductJoinDAO: 1: dao = new ProductJoinDAO()
+
+== 2.   商品リストを取得 ==
+DaoJoin -> ProductJoinDAO: 2-1: productList = findAll()
+DaoJoin -> DaoJoin:        2-2: 取得した商品リストの件数チェック9
+
+== 3. 削除後の一覧表示 ==
+DaoJoin -> DaoJoin:  3-1: Utils.showProductViews(productList)
+
+@enduml
